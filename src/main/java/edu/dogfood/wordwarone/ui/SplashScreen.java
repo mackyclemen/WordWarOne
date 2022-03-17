@@ -69,6 +69,9 @@ public class SplashScreen extends JFrame {
         sentenceThread = new Thread(new Runnable() {
             @Override
             public void run() {
+                int prevNum = 0;
+                int rand;
+
                 while (!loaded) {
                     try {
                         Thread.sleep(3000);
@@ -77,8 +80,14 @@ public class SplashScreen extends JFrame {
                     }
 
                     // Get a random sentence
-                    int random = (int) (Math.random() * words.size());
-                    jLabel_loading.setText(words.get(random));
+                    
+                    do {
+                        rand = (int) (Math.random() * words.size());
+                    } while(rand == prevNum);
+
+                    prevNum = rand;
+
+                    jLabel_loading.setText(words.get(rand));
                 }
             }
         });
@@ -163,9 +172,5 @@ public class SplashScreen extends JFrame {
                                 .addGap(0, 0, Short.MAX_VALUE)));
 
         pack();
-    }
-    
-    public static void main(String[] args) {
-        new SplashScreen(Settings.getInstance());
     }
 }
