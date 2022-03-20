@@ -4,8 +4,6 @@ import java.util.logging.Logger;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 
 import javax.swing.GroupLayout;
 import javax.swing.JFrame;
@@ -17,9 +15,6 @@ import javax.swing.WindowConstants;
 
 import org.netbeans.lib.awtextra.AbsoluteLayout;
 import org.netbeans.lib.awtextra.AbsoluteConstraints;
-
-import edu.dogfood.wordwarone.Settings;
-
 /**
  *
  * @author janah
@@ -29,7 +24,6 @@ public class SplashScreen extends JFrame {
     // Initialize logger
     private static Logger logger = Logger.getLogger(SplashScreen.class.getName());
 
-    private final Settings settings;
     private final Thread sentenceThread;
     private boolean loaded = false;
 
@@ -58,8 +52,7 @@ public class SplashScreen extends JFrame {
     /**
      * Creates new form SplashScreen
      */
-    public SplashScreen(Settings settings) {
-        this.settings = settings;
+    public SplashScreen() {
         initComponents();
 
         setLocationRelativeTo(null); //centers window
@@ -110,6 +103,8 @@ public class SplashScreen extends JFrame {
     public void end() {
         loaded = true;
 
+        // Hide window, then dispose
+        setVisible(false);
         dispose();
     }
 

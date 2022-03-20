@@ -41,15 +41,11 @@ public class MusicPlayer {
         }
     }
 
-    public void play(String filename) {
-        file = new File(filename);
-        
+    public void setFile(String filePath) {
+        file = new File(filePath);
+
         try {
-            logger.log(Level.INFO, "Playing " + filename);
             clip.open(AudioSystem.getAudioInputStream(file));
-            fc = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-            fc.setValue(vol);
-            clip.start();
         } catch(Exception ex) {
             logger.log(Level.WARNING, "AudioSystem threw an exception", ex);
         }
@@ -57,16 +53,12 @@ public class MusicPlayer {
 
     public void play() {
         if(file != null) {
-            try {
-                logger.log(Level.INFO, "Playing " + file.getName());
-                clip.open(AudioSystem.getAudioInputStream(file));
-                fc = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-                fc.setValue(vol);
-                clip.start();
-            } catch(Exception ex) {
-                logger.log(Level.WARNING, "AudioSystem threw an exception", ex);
-            }
-        }
+            logger.log(Level.INFO, "Playing " + file.getName());
+            fc = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+            fc.setValue(vol);
+            clip.start();
+            clip.loop(Clip.LOOP_CONTINUOUSLY);
+        } else throw new IllegalStateException("No file has been set");
     }
 
     public void stop() {

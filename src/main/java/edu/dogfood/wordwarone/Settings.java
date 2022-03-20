@@ -25,8 +25,8 @@ public class Settings {
 
     // Configuration constants
     public class DiffConfig {
-        static final int DIFFICULTY_EASY = 0;
-        static final int DIFFICULTY_HARD = 1;
+        public static final int DIFFICULTY_EASY = 0;
+        public static final int DIFFICULTY_HARD = 1;
 
         private DiffConfig() {}
     }
@@ -122,14 +122,20 @@ public class Settings {
         
         this.soundEnabled = soundEnabled;
 
+        // Temporarily access MusicPlayer instance
+        MusicPlayer mpInstance = MusicPlayer.getInstance();
+        
+        if(!soundEnabled) mpInstance.stop();
+        else mpInstance.play();
+        
         // Set config to file
         config.setProperty("soundEnabled", soundEnabled);
     }
 
     public void setVolume(int volume) {
-        // Limit values to 1 - 20
-        if (volume < 1) {
-            volume = 1;
+        // Limit values to 0 - 20
+        if (volume < 0) {
+            volume = 0;
         } else if (volume > 20) {
             volume = 20;
         }
@@ -138,6 +144,9 @@ public class Settings {
         logger.log(Level.INFO, "Volume set to " + volume);
 
         this.volume = volume;
+
+        // Temporarily access MusicPlayer instance
+        MusicPlayer.getInstance().setVolume(this.volume);
 
         // Set config to file
         config.setProperty("volume", volume);
@@ -151,5 +160,16 @@ public class Settings {
 
         // Set config to file
         config.setProperty("difficulty", difficulty);
+    }
+
+    public void close() {
+        // Save settings
+        logger.info("Saving settings");
+        try {
+            configBuilder.save();
+            logger.info("Save successful");
+        } catch (ConfigurationException e) {
+            logger.log(Level.SEVERE, "Failed to save settings", e);
+        }
     }
 }

@@ -1,4 +1,4 @@
-package edu.dogfood.database;
+package edu.dogfood.wordwarone.database;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -9,9 +9,10 @@ import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
-import java.util.logging.Level;
 
-import edu.dogfood.database.entry.Highscore;
+import edu.dogfood.wordwarone.database.entry.Highscore;
+
+import java.util.logging.Level;
 
 
 // Singleton class only
@@ -41,6 +42,8 @@ public class HighScoreRepository implements AutoCloseable {
     //       a Date object in code.
     // score: Integer, Not Null
     //     - This stores the score of the entry.
+    // difficulty: Integer, Not Null
+    //     - This stores the difficulty of the entry.
 
     private HighScoreRepository() {
         logger.log(Level.INFO, "Initializing Database...");
@@ -55,7 +58,7 @@ public class HighScoreRepository implements AutoCloseable {
             if (!set.next()) {
                 // Create the table
                 logger.log(Level.INFO, "Creating high_scores table");
-                sql = "CREATE TABLE high_scores (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, date INTEGER NOT NULL, score INTEGER NOT NULL)";
+                sql = "CREATE TABLE high_scores (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, date INTEGER NOT NULL, score INTEGER NOT NULL, difficulty INTEGER NOT NULL)";
                 preparedStatement = connection.prepareStatement(sql);
                 preparedStatement.executeUpdate();
             }
@@ -76,17 +79,17 @@ public class HighScoreRepository implements AutoCloseable {
     public List<Highscore> getHighScores() {
         List<Highscore> highScores = new ArrayList<Highscore>();
         try {
-            String sql = "SELECT * FROM high_scores";
+            String sql = "SELECT * FROM high_scores ORDER BY score DESC";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             ResultSet set = preparedStatement.executeQuery();
 
             // Iterate through the results
             while (set.next()) {
-                int id = set.getInt("id");
                 String name = set.getString("name");
                 Date date = new Date(set.getLong("date"));
                 int score = set.getInt("score");
-                Highscore highscore = new Highscore(id, name, date, score);
+                int difficulty = set.getInt("difficulty");
+                Highscore highscore = new Highscore(name, date, score, difficulty);
                 highScores.add(highscore);
             }
 
@@ -110,7 +113,7 @@ public class HighScoreRepository implements AutoCloseable {
 
             // Iterate through the results - if there are none, return null
             if (set.next()) {
-                highscore = new Highscore(set.getInt("id"), set.getString("name"), new Date(set.getLong("date")), set.getInt("score"));
+                highscore = new Highscore(set.getString("name"), new Date(set.getLong("date")), set.getInt("score"), set.getInt("difficulty"));
             }
         } catch (SQLException ex) {
             logger.log(Level.SEVERE, "An SQL exception has been thrown", ex);
@@ -119,25 +122,22 @@ public class HighScoreRepository implements AutoCloseable {
         return highscore;
     }
 
-    public boolean addHighscore(String name, Date date, int score) {
-        boolean result = false;
-
-        // Prepare a statement to add the high score
-        String sql = "INSERT INTO high_scores (name, date, score) VALUES (?, ?, ?)";
+    public boolean addHighscore(Highscore highscore) {
+        boolean success = false;
         try {
-            // Execute the statement
+            String sql = "INSERT INTO high_scores (name, date, score, difficulty) VALUES (?, ?, ?, ?)";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1, name);
-            preparedStatement.setLong(2, date.getTime());
-            preparedStatement.setInt(3, score);
+            preparedStatement.setString(1, highscore.getName());
+            preparedStatement.setLong(2, highscore.getDate().getTime());
+            preparedStatement.setInt(3, highscore.getScore());
+            preparedStatement.setInt(4, highscore.getDifficulty());
             preparedStatement.executeUpdate();
-
-            result = true;
+            success = true;
         } catch (SQLException ex) {
             logger.log(Level.SEVERE, "An SQL exception has been thrown", ex);
         }
 
-        return result;
+        return success;
     }
 
     public boolean removeHighscore(int id) {
