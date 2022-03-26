@@ -1,11 +1,13 @@
 package edu.dogfood.wordwarone.ui;
 
 import java.util.logging.Logger;
+import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 
 import javax.swing.GroupLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -150,7 +152,13 @@ public class SplashScreen extends JFrame {
                 new AbsoluteConstraints(0, 693, 1280, 27));
 
         jLabel_logo.setHorizontalAlignment(SwingConstants.CENTER);
-        jLabel_logo.setText("LOGO");
+        try {
+            File file = new File(getClass().getClassLoader().getResource("logo.png").getPath());
+            jLabel_logo.setIcon(new ImageIcon(file.getPath()));
+        } catch(Exception e) {
+            logger.warning("Could not load logo.png");
+        }
+
         jPanel_background.add(jLabel_logo, new AbsoluteConstraints(390, 50, 510, 390));
 
         GroupLayout layout = new GroupLayout(getContentPane());

@@ -1,6 +1,7 @@
 package edu.dogfood.wordwarone.ui;
 
 import javax.swing.GroupLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -13,12 +14,17 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.util.logging.Logger;
 
 /**
  *
  * @author Tristan L. Bonus
  */
 public class Menu extends JFrame {
+
+    // Logger
+    private static Logger logger = Logger.getLogger(Menu.class.getName());
 
     /**
      * Creates new form menu
@@ -114,7 +120,15 @@ public class Menu extends JFrame {
         heading.setText("WORD WAR I: ");
 
         jLabel1.setHorizontalAlignment(SwingConstants.CENTER);
-        jLabel1.setText("LOGO");
+
+        try {
+            File file = new File(getClass().getClassLoader().getResource("logo.png").getPath());
+            jLabel1.setIcon(new ImageIcon(file.getPath()));
+        } catch(Exception e) {
+            logger.warning("Could not load logo.png");
+        }
+
+        // jLabel1.setText("LOGO");
 
         GroupLayout jPanel1Layout = new GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);

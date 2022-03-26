@@ -21,6 +21,7 @@ import javax.swing.plaf.ColorUIResource;
 
 import edu.dogfood.wordwarone.Settings;
 import edu.dogfood.wordwarone.data.LevelBank;
+import edu.dogfood.wordwarone.database.EnglishWordsRepository;
 import edu.dogfood.wordwarone.database.entry.Highscore;
 import edu.dogfood.wordwarone.database.entry.SavedGame;
 import edu.dogfood.wordwarone.interfaces.GameHandoffListener;
@@ -402,6 +403,8 @@ public class GameProper extends JFrame {
         String word = jTextField_currWord.getText().toLowerCase();
         jTextField_currWord.setText("");
 
+        float MAIN_WORD_MULTIPLIER = 1.5f;
+
         if (word.isEmpty() || word.equalsIgnoreCase("Enter a word...")) {
             JOptionPane.showMessageDialog(this, "Enter a word.", "Blank Submission", JOptionPane.ERROR_MESSAGE);
             return;
@@ -416,7 +419,8 @@ public class GameProper extends JFrame {
                 return;
             } else {
                 mainWords.put(word, true);
-                score_var.setText(String.valueOf(++scoreVal));
+                scoreVal += EnglishWordsRepository.getScore(word) * MAIN_WORD_MULTIPLIER;
+                score_var.setText(String.valueOf(scoreVal));
                 wordsleft_var.setText(String.valueOf(mainWords.size() - ++wordsEntered));
                 updateWords();
                 nextRoundPrep();
@@ -433,7 +437,8 @@ public class GameProper extends JFrame {
                 return;
             } else {
                 secondaryEnteredWords.add(word);
-                score_var.setText(String.valueOf(++scoreVal));
+                scoreVal += EnglishWordsRepository.getScore(word);
+                score_var.setText(String.valueOf(scoreVal));
                 wordsleft_var.setText(String.valueOf(mainWords.size() - ++wordsEntered));
                 updateWords();
                 nextRoundPrep();
