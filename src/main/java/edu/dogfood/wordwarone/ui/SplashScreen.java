@@ -152,9 +152,8 @@ public class SplashScreen extends JFrame {
                 new AbsoluteConstraints(0, 693, 1280, 27));
 
         jLabel_logo.setHorizontalAlignment(SwingConstants.CENTER);
-        try {
-            File file = new File(getClass().getClassLoader().getResource("logo.png").getPath());
-            jLabel_logo.setIcon(new ImageIcon(file.getPath()));
+        try {;
+            jLabel_logo.setIcon(new ImageIcon(getClass().getClassLoader().getResource("logo.png")));
         } catch(Exception e) {
             logger.warning("Could not load logo.png");
         }

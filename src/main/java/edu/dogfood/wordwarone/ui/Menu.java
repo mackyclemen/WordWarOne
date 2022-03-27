@@ -122,8 +122,7 @@ public class Menu extends JFrame {
         jLabel1.setHorizontalAlignment(SwingConstants.CENTER);
 
         try {
-            File file = new File(getClass().getClassLoader().getResource("logo.png").getPath());
-            jLabel1.setIcon(new ImageIcon(file.getPath()));
+            jLabel1.setIcon(new ImageIcon(getClass().getClassLoader().getResource("logo.png")));
         } catch(Exception e) {
             logger.warning("Could not load logo.png");
         }

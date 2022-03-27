@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -42,12 +44,16 @@ public class EnglishWordsRepository {
             logger.log(Level.INFO, "Reading words_alpha.txt");
 
             // Read file
-            File file = new File(getClass().getClassLoader().getResource("words_alpha.txt").getPath());
+            try {
+                // get resource as stream
+                InputStream stream = getClass().getClassLoader().getResourceAsStream("words_alpha.txt");
+                reader = new BufferedReader(new InputStreamReader(stream));
+            } catch (Exception e) {
+                // Log error
+                logger.log(Level.SEVERE, "Error reading words_alpha.txt");
+            }
+
             // Split file into words
-
-            // Initialize file reader
-            reader = new BufferedReader(new FileReader(file)); 
-
             // Read each line
             String line;
             while((line = reader.readLine()) != null) {
@@ -69,11 +75,14 @@ public class EnglishWordsRepository {
             logger.log(Level.INFO, "Reading final.txt");
 
             // Read file
-            File file = new File(getClass().getClassLoader().getResource("final.txt").getPath());
-            // Split file into words
-
-            // Initialize file reader
-            reader = new BufferedReader(new FileReader(file)); 
+            try {
+                // get resource as stream
+                InputStream stream = getClass().getClassLoader().getResourceAsStream("final.txt");
+                reader = new BufferedReader(new InputStreamReader(stream));
+            } catch (Exception e) {
+                // Log error
+                logger.log(Level.SEVERE, "Error reading final.txt");
+            }
 
             // Read each line
             String line;

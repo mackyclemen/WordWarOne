@@ -4,6 +4,7 @@ import java.util.logging.Logger;
 import java.util.logging.Level;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -58,7 +59,7 @@ public class Game {
         // Initialize Audio
         MusicPlayer musicPlayer = MusicPlayer.getInstance();
         musicPlayer.setVolume(settings.getVolume());
-        musicPlayer.setFile(getClass().getClassLoader().getResource("bg.wav").getPath());
+        musicPlayer.setFile(getClass().getClassLoader().getResourceAsStream("bg.wav"));
 
         if(settings.isSoundEnabled()) {
             musicPlayer.play();
@@ -266,7 +267,7 @@ public class Game {
                 }
 
                 gameProper.setVisible(false);
-                menu.setVisible(true);
+                playerRanking.setVisible(true);
 
                 gameProper.dispose();
             }

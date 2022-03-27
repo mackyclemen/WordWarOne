@@ -1,9 +1,12 @@
 package edu.dogfood.wordwarone;
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.InputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.FloatControl;
@@ -15,7 +18,7 @@ public class MusicPlayer {
 
     private float vol = -80.0f;
 
-    private File file = null;
+    private InputStream file = null;
     private Clip clip = null;
     private FloatControl fc = null;
     
@@ -41,11 +44,11 @@ public class MusicPlayer {
         }
     }
 
-    public void setFile(String filePath) {
-        file = new File(filePath);
+    public void setFile(InputStream file) {
+        this.file = file;
 
         try {
-            clip.open(AudioSystem.getAudioInputStream(file));
+            clip.open(AudioSystem.getAudioInputStream(new BufferedInputStream(this.file)));
         } catch(Exception ex) {
             logger.log(Level.WARNING, "AudioSystem threw an exception", ex);
         }
@@ -53,7 +56,7 @@ public class MusicPlayer {
 
     public void play() {
         if(file != null) {
-            logger.log(Level.INFO, "Playing " + file.getName());
+            logger.log(Level.INFO, "Playing set file...");
             fc = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
             fc.setValue(vol);
             clip.start();
