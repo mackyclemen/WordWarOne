@@ -71,7 +71,7 @@ public class PlayerRanking extends JFrame {
     }
 
     private class HighscoreRenderer implements ListCellRenderer<Highscore> {
-        final int[] colors = {0xc9a310, 0xc9c9c9, 0x944511};
+        final int[] colors = {0xc9a310, 0x262626, 0x944511};
 
         @Override
         public Component getListCellRendererComponent(JList<? extends Highscore> list, Highscore value, int index,
@@ -86,7 +86,10 @@ public class PlayerRanking extends JFrame {
 
             jLabel1.setHorizontalAlignment(SwingConstants.CENTER);
             jLabel1.setText("Rank: " + (index + 1));
-            jLabel1.setForeground(new Color(index < 5 ? colors[index] : 0x000000));
+            jLabel1.setForeground(new Color(index < 3 ? colors[index] : 0x000000));
+
+            // Set jlabel font style to bold
+            jLabel1.setFont(new Font("Tahoma", Font.BOLD, 12));
             panel.add(jLabel1);
             
             jLabel2.setHorizontalAlignment(SwingConstants.CENTER);
@@ -111,8 +114,8 @@ public class PlayerRanking extends JFrame {
                 )
             );
 
-            panel.setBackground(new Color(0xe3e3e3));
-            panel.setForeground(new Color(0x81c1d2));
+            panel.setBackground(new Color(0xbfffff));
+            panel.setForeground(new Color(0xe3efe7));
 
             return panel;
         }
