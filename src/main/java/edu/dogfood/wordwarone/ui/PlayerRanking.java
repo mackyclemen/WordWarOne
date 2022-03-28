@@ -258,5 +258,11 @@ public class PlayerRanking extends JFrame {
         // log
         logger.info("easyModel size: " + easyModel.getHighscores().size());
         logger.info("hardModel size: " + hardModel.getHighscores().size());
+
+        // Only set models if the lists are not null
+        if (jList1 != null && jList2 != null) {
+            jList1.setModel(easyModel);
+            jList2.setModel(hardModel);
+        }
     }
 }

@@ -1,10 +1,9 @@
 package edu.dogfood.wordwarone;
 
-import java.util.logging.Logger;
-import java.util.logging.Level;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.File;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -36,9 +35,6 @@ public class Game {
     // Initialize logger
     private static Logger logger = Logger.getLogger(Game.class.getName());
 
-    private final HighScoreRepository hsRepo;
-    private final SavedGameRepository sgRepo;
-    private final EnglishWordsRepository ewRepo;
     private final Settings settings;
 
     private final Menu menu = new Menu();
@@ -80,11 +76,12 @@ public class Game {
         // Show splash screen
         final SplashScreen splashScreen = new SplashScreen();
 
-        hsRepo = HighScoreRepository.getInstance();
+        // Initialize all repositories on launch by "getting an instance"
+        HighScoreRepository.getInstance();
         splashScreen.changeProgress(33);
-        sgRepo = SavedGameRepository.getInstance();
+        SavedGameRepository.getInstance();
         splashScreen.changeProgress(67);
-        ewRepo = EnglishWordsRepository.getInstance();
+        EnglishWordsRepository.getInstance();
         splashScreen.changeProgress(99);
 
         // Menu EventListeners
@@ -220,8 +217,8 @@ public class Game {
             // Write databases
             try {
                 logger.log(Level.INFO, "Writing databases");
-                hsRepo.close();
-                sgRepo.close();
+                HighScoreRepository.getInstance().close();
+                SavedGameRepository.getInstance().close();
             } catch(Exception ex) {
                 logger.log(Level.SEVERE, "Error closing databases", ex);
             }
@@ -240,8 +237,7 @@ public class Game {
         gameProper.setGameHandoffListener(new GameHandoffListener() {
             @Override
             public void onSave(SavedGame sg) {
-                // TODO Auto-generated method stub
-                // sgRepo.save(sg);
+                SavedGameRepository sgRepo = SavedGameRepository.getInstance();
 
                 // If ID is non-negative, update existing SavedGame
                 if (sg.getId() >= 0) {
@@ -258,8 +254,7 @@ public class Game {
 
             @Override
             public void onForfeit(Highscore highscore) {
-                // TODO Auto-generated method stub
-                // hsRepo.save(highscore);
+                HighScoreRepository hsRepo = HighScoreRepository.getInstance();
 
                 if(highscore.getScore() > 0) {
                     hsRepo.addHighscore(highscore);
