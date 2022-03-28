@@ -517,7 +517,8 @@ public class GameProper extends JFrame {
 
             // Check if the difficulty is easy/hard, then set the health value to the appropriate value
             // 5 for easy, 3 for hard
-            livesVal = (diffOverride == DiffConfig.DIFFICULTY_EASY ? 5 : 3);
+            int diff = diffOverride != null ? diffOverride : Settings.getInstance().getDifficulty();
+            livesVal = (diff == DiffConfig.DIFFICULTY_EASY ? 5 : 3);
             wordsEntered = 0;
         } else {
             // Otherwise, load the levelBank from the database
