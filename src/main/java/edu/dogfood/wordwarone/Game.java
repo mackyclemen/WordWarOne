@@ -107,7 +107,6 @@ public class Game {
         });
 
         menu.rankingButton.addActionListener(e -> {
-            playerRanking.update();
             playerRanking.setVisible(true);
             menu.setVisible(false);
         });

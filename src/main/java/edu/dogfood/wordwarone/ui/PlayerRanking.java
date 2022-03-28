@@ -5,6 +5,8 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.logging.Logger;
@@ -62,11 +64,6 @@ public class PlayerRanking extends JFrame {
 
         public List<Highscore> getHighscores() {
             return highscores;
-        }
-
-        public void setHighscores(List<Highscore> highscores) {
-            this.highscores = highscores;
-            fireContentsChanged(this, 0, highscores.size());
         }
     }
 
@@ -139,20 +136,15 @@ public class PlayerRanking extends JFrame {
      * Creates new form playerRanking
      */
     public PlayerRanking() {
-        easyModel = new HighscoreModel(
-            hsRepo.getHighScores().stream()
-            .filter(predicate -> predicate.getDifficulty() == DiffConfig.DIFFICULTY_EASY)
-            .collect(Collectors.toList()));
-        
-        hardModel = new HighscoreModel(
-            hsRepo.getHighScores().stream()
-            .filter(predicate -> predicate.getDifficulty() == DiffConfig.DIFFICULTY_HARD)
-            .collect(Collectors.toList()));
-        
-        // log
-        logger.info("easyModel size: " + easyModel.getHighscores().size());
-        logger.info("hardModel size: " + hardModel.getHighscores().size());
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentShown(ComponentEvent e) {
+                super.componentShown(e);
+                setModels();
+            }
+        });
 
+        setModels();
         initComponents();
         setLocationRelativeTo(null);
     }
@@ -252,15 +244,19 @@ public class PlayerRanking extends JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    public void update() {
-        easyModel.setHighscores(
+    private void setModels() {
+        easyModel = new HighscoreModel(
             hsRepo.getHighScores().stream()
             .filter(predicate -> predicate.getDifficulty() == DiffConfig.DIFFICULTY_EASY)
             .collect(Collectors.toList()));
-
-        hardModel.setHighscores(
+        
+        hardModel = new HighscoreModel(
             hsRepo.getHighScores().stream()
             .filter(predicate -> predicate.getDifficulty() == DiffConfig.DIFFICULTY_HARD)
             .collect(Collectors.toList()));
+        
+        // log
+        logger.info("easyModel size: " + easyModel.getHighscores().size());
+        logger.info("hardModel size: " + hardModel.getHighscores().size());
     }
 }
