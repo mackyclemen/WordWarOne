@@ -1,4 +1,4 @@
-package edu.dogfood.database.entry;
+package edu.dogfood.wordwarone.database.entry;
 
 import java.util.Date;
 
@@ -15,27 +15,21 @@ public class Highscore {
     //       a Date object in code.
     // score: Integer, Not Null
     //     - This stores the score of the entry.
+    // difficulty: Integer, Not Null
+    //     - This stores the difficulty of the entry.
 
-    private int id;
     private String name;
     private Date date;
     private int score;
+    private int difficulty;
 
-    public Highscore(int id, String name, Date date, int score) {
-        this.id = id;
+    public Highscore(String name, Date date, int score, int difficulty) {
         this.name = name;
         this.date = date;
         this.score = score;
+        this.difficulty = difficulty;
     }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
+    
     public String getName() {
         return name;
     }
@@ -58,5 +52,13 @@ public class Highscore {
 
     public void setScore(int score) {
         this.score = score;
+    }
+
+    public int getDifficulty() {
+        return difficulty;
+    }
+
+    public void setDifficulty(int difficulty) {
+        this.difficulty = difficulty;
     }
 }

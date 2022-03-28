@@ -1,6 +1,7 @@
 package edu.dogfood.wordwarone;
 
-import java.io.File;
+import java.io.BufferedInputStream;
+import java.io.InputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -15,7 +16,7 @@ public class MusicPlayer {
 
     private float vol = -80.0f;
 
-    private File file = null;
+    private InputStream file = null;
     private Clip clip = null;
     private FloatControl fc = null;
     
@@ -41,15 +42,11 @@ public class MusicPlayer {
         }
     }
 
-    public void play(String filename) {
-        file = new File(filename);
-        
+    public void setFile(InputStream file) {
+        this.file = file;
+
         try {
-            logger.log(Level.INFO, "Playing " + filename);
-            clip.open(AudioSystem.getAudioInputStream(file));
-            fc = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-            fc.setValue(vol);
-            clip.start();
+            clip.open(AudioSystem.getAudioInputStream(new BufferedInputStream(this.file)));
         } catch(Exception ex) {
             logger.log(Level.WARNING, "AudioSystem threw an exception", ex);
         }
@@ -57,16 +54,12 @@ public class MusicPlayer {
 
     public void play() {
         if(file != null) {
-            try {
-                logger.log(Level.INFO, "Playing " + file.getName());
-                clip.open(AudioSystem.getAudioInputStream(file));
-                fc = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-                fc.setValue(vol);
-                clip.start();
-            } catch(Exception ex) {
-                logger.log(Level.WARNING, "AudioSystem threw an exception", ex);
-            }
-        }
+            logger.log(Level.INFO, "Playing set file...");
+            fc = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+            fc.setValue(vol);
+            clip.start();
+            clip.loop(Clip.LOOP_CONTINUOUSLY);
+        } else throw new IllegalStateException("No file has been set");
     }
 
     public void stop() {

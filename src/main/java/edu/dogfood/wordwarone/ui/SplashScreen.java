@@ -1,13 +1,12 @@
 package edu.dogfood.wordwarone.ui;
 
-import java.util.logging.Logger;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.util.logging.Logger;
 
 import javax.swing.GroupLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -15,11 +14,8 @@ import javax.swing.JProgressBar;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 
-import org.netbeans.lib.awtextra.AbsoluteLayout;
 import org.netbeans.lib.awtextra.AbsoluteConstraints;
-
-import edu.dogfood.wordwarone.Settings;
-
+import org.netbeans.lib.awtextra.AbsoluteLayout;
 /**
  *
  * @author janah
@@ -29,7 +25,6 @@ public class SplashScreen extends JFrame {
     // Initialize logger
     private static Logger logger = Logger.getLogger(SplashScreen.class.getName());
 
-    private final Settings settings;
     private final Thread sentenceThread;
     private boolean loaded = false;
 
@@ -58,8 +53,7 @@ public class SplashScreen extends JFrame {
     /**
      * Creates new form SplashScreen
      */
-    public SplashScreen(Settings settings) {
-        this.settings = settings;
+    public SplashScreen() {
         initComponents();
 
         setLocationRelativeTo(null); //centers window
@@ -110,12 +104,12 @@ public class SplashScreen extends JFrame {
     public void end() {
         loaded = true;
 
+        // Hide window, then dispose
+        setVisible(false);
         dispose();
     }
 
-    @SuppressWarnings("unchecked")
     private void initComponents() {
-
         jPanel_background = new JPanel();
         jLabel_tagline = new JLabel();
         jLabel_gameTitle = new JLabel();
@@ -155,7 +149,12 @@ public class SplashScreen extends JFrame {
                 new AbsoluteConstraints(0, 693, 1280, 27));
 
         jLabel_logo.setHorizontalAlignment(SwingConstants.CENTER);
-        jLabel_logo.setText("LOGO");
+        try {;
+            jLabel_logo.setIcon(new ImageIcon(getClass().getClassLoader().getResource("logo.png")));
+        } catch(Exception e) {
+            logger.warning("Could not load logo.png");
+        }
+
         jPanel_background.add(jLabel_logo, new AbsoluteConstraints(390, 50, 510, 390));
 
         GroupLayout layout = new GroupLayout(getContentPane());
