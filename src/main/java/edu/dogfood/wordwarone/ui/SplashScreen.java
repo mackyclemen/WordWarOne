@@ -1,10 +1,9 @@
 package edu.dogfood.wordwarone.ui;
 
-import java.util.logging.Logger;
-import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.GroupLayout;
 import javax.swing.ImageIcon;
@@ -15,8 +14,8 @@ import javax.swing.JProgressBar;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 
-import org.netbeans.lib.awtextra.AbsoluteLayout;
 import org.netbeans.lib.awtextra.AbsoluteConstraints;
+import org.netbeans.lib.awtextra.AbsoluteLayout;
 /**
  *
  * @author janah
@@ -110,9 +109,7 @@ public class SplashScreen extends JFrame {
         dispose();
     }
 
-    @SuppressWarnings("unchecked")
     private void initComponents() {
-
         jPanel_background = new JPanel();
         jLabel_tagline = new JLabel();
         jLabel_gameTitle = new JLabel();

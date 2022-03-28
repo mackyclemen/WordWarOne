@@ -1,7 +1,5 @@
 package edu.dogfood.wordwarone.data;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -9,6 +7,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import edu.dogfood.wordwarone.Settings;
 import edu.dogfood.wordwarone.Settings.DiffConfig;
@@ -16,8 +16,6 @@ import edu.dogfood.wordwarone.database.EnglishWordsRepository;
 
 /**
  * LevelBank
- * TODO: Reduce common words, because it will take long to get 80+ words. For
- * the easy diff.
  */
 public class LevelBank {
 
@@ -34,7 +32,6 @@ public class LevelBank {
 
     // Get instances of EnglishWordsRepository and Settings
     private EnglishWordsRepository repository = EnglishWordsRepository.getInstance();
-    private Settings settings = Settings.getInstance();
 
     // Prepare logger
     Logger logger = Logger.getLogger(LevelBank.class.getName());
